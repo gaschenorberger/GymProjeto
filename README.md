@@ -1,40 +1,24 @@
 # Sistema de Gerenciamento de Academia
 
-## Sobre o Projeto
+Sistema desktop desenvolvido em **Java Swing** para auxiliar no gerenciamento básico de uma academia.
 
-Este projeto tem como objetivo desenvolver um sistema desktop para gerenciamento de uma academia, utilizando **Java Swing** para construção da interface gráfica.
-
-O sistema permitirá realizar o controle de alunos, planos e matrículas, além de possuir autenticação de usuário e um menu principal para acesso às funcionalidades.
-
-O projeto será desenvolvido aplicando conceitos de análise, projeto e implementação de sistemas.
+O projeto permite realizar o controle de **alunos**, **planos** e **matrículas**, além de contar com autenticação de usuário e navegação através de um menu principal.
 
 ---
 
-## Objetivo Geral
+# Sobre o Projeto
 
-Desenvolver um sistema desktop capaz de auxiliar no gerenciamento básico de uma academia, permitindo o cadastro e controle de alunos, planos e matrículas.
+O sistema foi desenvolvido com o objetivo de aplicar conceitos de análise, projeto e desenvolvimento de software utilizando Java.
 
----
+A aplicação possui interface gráfica construída com **Java Swing** e utiliza acesso a banco de dados através de **JDBC**.
 
-## Objetivos Específicos
+O sistema será composto pelos seguintes módulos principais:
 
-O sistema deverá permitir:
-
-* Realizar login no sistema;
-* Cadastrar alunos;
-* Consultar alunos cadastrados;
-* Editar alunos;
-* Excluir alunos;
-* Cadastrar planos;
-* Consultar planos;
-* Editar planos;
-* Excluir planos;
-* Realizar matrículas;
-* Consultar matrículas;
-* Editar matrículas;
-* Excluir matrículas;
-* Visualizar os registros através de tabelas;
-* Navegar pelas funcionalidades através de um menu principal.
+* Login;
+* Menu principal;
+* Cadastro de alunos;
+* Cadastro de planos;
+* Gerenciamento de matrículas.
 
 ---
 
@@ -42,31 +26,18 @@ O sistema deverá permitir:
 
 ## Login
 
-A tela de login será responsável pela autenticação do usuário.
-
-### Campos
+O sistema possui uma tela de autenticação onde o usuário deverá informar:
 
 * Usuário;
 * Senha.
 
-### Ações
-
-* Entrar.
-
-### Validações
-
-* Os campos não poderão estar vazios;
-* O usuário e a senha deverão ser validados;
-* Caso o login seja inválido, o sistema deverá apresentar uma mensagem de erro;
-* Caso o login seja válido, o usuário será direcionado para o menu principal.
+Após a validação dos dados, o usuário será direcionado para o menu principal.
 
 ---
 
 ## Menu Principal
 
-A tela principal permitirá acessar as funcionalidades do sistema.
-
-### Opções
+Através do menu principal será possível acessar as funcionalidades do sistema:
 
 * Alunos;
 * Planos;
@@ -75,13 +46,21 @@ A tela principal permitirá acessar as funcionalidades do sistema.
 
 ---
 
-# Cadastro de Alunos
+## Gerenciamento de Alunos
 
-Tela responsável pelo gerenciamento dos alunos da academia.
+O módulo de alunos permite realizar o controle dos alunos cadastrados na academia.
 
-## Campos
+Entre as principais operações estão:
 
-* Código;
+* Cadastrar aluno;
+* Visualizar alunos cadastrados;
+* Editar dados;
+* Excluir registros;
+* Limpar campos do formulário;
+* Selecionar registros através da tabela.
+
+### Dados do Aluno
+
 * Nome;
 * CPF;
 * Data de nascimento;
@@ -90,63 +69,35 @@ Tela responsável pelo gerenciamento dos alunos da academia.
 * Endereço;
 * Situação.
 
-## Ações
-
-* Salvar;
-* Editar;
-* Excluir;
-* Limpar campos.
-
-## Tabela
-
-A tela deverá possuir uma `JTable` para exibir os alunos cadastrados.
-
-Ao selecionar um aluno na tabela, seus dados deverão ser carregados nos campos para permitir edição ou exclusão.
-
 ---
 
-# Cadastro de Planos
+## Gerenciamento de Planos
 
-Tela responsável pelo gerenciamento dos planos oferecidos pela academia.
+O módulo de planos permite cadastrar e administrar os planos oferecidos pela academia.
 
-## Campos
+### Dados do Plano
 
-* Código;
-* Nome do plano;
+* Nome;
 * Duração em meses;
 * Valor;
 * Descrição;
 * Situação.
 
-## Exemplos de Planos
+### Exemplos
 
 * Mensal;
 * Trimestral;
 * Semestral;
 * Anual.
 
-## Ações
-
-* Salvar;
-* Editar;
-* Excluir;
-* Limpar campos.
-
-## Tabela
-
-A tela deverá possuir uma `JTable` para exibir os planos cadastrados.
-
-Ao selecionar um plano na tabela, seus dados deverão ser carregados nos campos para edição ou exclusão.
-
 ---
 
-# Cadastro de Matrículas
+## Gerenciamento de Matrículas
 
-Tela responsável pelo registro das matrículas dos alunos.
+O módulo de matrículas será responsável por relacionar um aluno a determinado plano.
 
-## Campos
+### Dados da Matrícula
 
-* Código;
 * Aluno;
 * Plano;
 * Data de início;
@@ -154,256 +105,17 @@ Tela responsável pelo registro das matrículas dos alunos.
 * Valor;
 * Situação.
 
-## Situações Possíveis
+### Situações
 
 * Ativa;
 * Vencida;
 * Cancelada.
 
-## Ações
-
-* Salvar;
-* Editar;
-* Excluir;
-* Limpar campos.
-
-## Tabela
-
-A tela deverá possuir uma `JTable` para exibir as matrículas cadastradas.
-
-Ao selecionar uma matrícula na tabela, seus dados deverão ser carregados nos campos para edição ou exclusão.
-
----
-
-# Requisitos Funcionais
-
-## RF01 - Realizar Login
-
-O sistema deverá permitir que o usuário informe usuário e senha para acessar o sistema.
-
-## RF02 - Validar Login
-
-O sistema deverá validar os dados informados e impedir o acesso quando o usuário ou senha estiverem incorretos.
-
-## RF03 - Gerenciar Alunos
-
-O sistema deverá permitir cadastrar, consultar, editar e excluir alunos.
-
-## RF04 - Listar Alunos
-
-O sistema deverá apresentar os alunos cadastrados em uma tabela.
-
-## RF05 - Gerenciar Planos
-
-O sistema deverá permitir cadastrar, consultar, editar e excluir planos.
-
-## RF06 - Listar Planos
-
-O sistema deverá apresentar os planos cadastrados em uma tabela.
-
-## RF07 - Gerenciar Matrículas
-
-O sistema deverá permitir cadastrar, consultar, editar e excluir matrículas.
-
-## RF08 - Listar Matrículas
-
-O sistema deverá apresentar as matrículas cadastradas em uma tabela.
-
-## RF09 - Selecionar Registros
-
-O sistema deverá permitir selecionar registros nas tabelas e carregar suas informações nos campos correspondentes.
-
-## RF10 - Limpar Campos
-
-O sistema deverá permitir limpar os campos dos formulários.
-
-## RF11 - Navegação
-
-O sistema deverá possuir um menu principal para acesso às funcionalidades.
-
-## RF12 - Sair do Sistema
-
-O sistema deverá permitir encerrar a aplicação através do menu principal.
-
----
-
-# Regras de Negócio
-
-## RN01 - CPF do Aluno
-
-Não deverá ser permitido cadastrar dois alunos com o mesmo CPF.
-
-## RN02 - Campos Obrigatórios do Aluno
-
-O nome e o CPF do aluno deverão ser obrigatoriamente preenchidos.
-
-## RN03 - Valor do Plano
-
-O valor do plano deverá ser maior que zero.
-
-## RN04 - Duração do Plano
-
-A duração do plano deverá ser maior que zero.
-
-## RN05 - Matrícula com Aluno
-
-Toda matrícula deverá estar associada a um aluno cadastrado.
-
-## RN06 - Matrícula com Plano
-
-Toda matrícula deverá estar associada a um plano cadastrado.
-
-## RN07 - Datas da Matrícula
-
-A data de vencimento deverá ser posterior à data de início.
-
-## RN08 - Exclusão de Registros
-
-Antes de excluir um registro, o sistema deverá solicitar confirmação ao usuário.
-
----
-
-# Entidades do Sistema
-
-## Usuário
-
-```text
-idUsuario
-usuario
-senha
-```
-
----
-
-## Aluno
-
-```text
-idAluno
-nome
-cpf
-dataNascimento
-telefone
-email
-endereco
-ativo
-```
-
----
-
-## Plano
-
-```text
-idPlano
-nome
-duracaoMeses
-valor
-descricao
-ativo
-```
-
----
-
-## Matrícula
-
-```text
-idMatricula
-idAluno
-idPlano
-dataInicio
-dataVencimento
-valor
-situacao
-```
-
----
-
-# Relacionamentos
-
-Um aluno poderá possuir várias matrículas ao longo do tempo.
-
-Um plano poderá estar associado a várias matrículas.
-
-Cada matrícula deverá estar associada a apenas um aluno e um plano.
-
-```text
-Aluno 1 -------- N Matricula N -------- 1 Plano
-```
-
----
-
-# Casos de Uso
-
-O principal ator do sistema será o:
-
-```text
-Usuario
-```
-
-## Casos de Uso
-
-* Realizar login;
-* Gerenciar alunos;
-* Gerenciar planos;
-* Gerenciar matrículas;
-* Consultar registros;
-* Sair do sistema.
-
----
-
-# Fluxo Principal de Matrícula
-
-```text
-Inicio
-  |
-  v
-Realizar Login
-  |
-  v
-Validar Login
-  |
-  v
-Acessar Menu Principal
-  |
-  v
-Selecionar Matriculas
-  |
-  v
-Selecionar Aluno
-  |
-  v
-Selecionar Plano
-  |
-  v
-Informar Dados da Matricula
-  |
-  v
-Validar Dados
-  |
-  +-------------------+
-  |                   |
-  v                   v
-Dados Validos?       Nao
-  |                   |
- Sim                  v
-  |             Exibir Mensagem
-  v                   |
-Salvar Matricula <----+
-  |
-  v
-Atualizar Tabela
-  |
-  v
-Exibir Mensagem de Sucesso
-  |
-  v
-Fim
-```
-
 ---
 
 # Estrutura do Projeto
 
-O projeto será organizado nos seguintes pacotes:
+O projeto será organizado utilizando os seguintes pacotes:
 
 ```text
 src
@@ -419,15 +131,13 @@ src
 
 ---
 
-# Pacote Model
+# Pacotes
+
+## `br.com.sistema.model`
 
 Responsável pelas classes que representam as entidades do sistema.
 
-```text
-br.com.sistema.model
-```
-
-Classes:
+Classes previstas:
 
 ```text
 Usuario.java
@@ -438,15 +148,11 @@ Matricula.java
 
 ---
 
-# Pacote DAO
+## `br.com.sistema.dao`
 
-Responsável pelas operações de acesso ao banco de dados.
+Responsável pelas operações de acesso e manipulação dos dados no banco.
 
-```text
-br.com.sistema.dao
-```
-
-Classes:
+Classes previstas:
 
 ```text
 UsuarioDao.java
@@ -457,15 +163,11 @@ MatriculaDao.java
 
 ---
 
-# Pacote View
+## `br.com.sistema.view`
 
 Responsável pelas interfaces gráficas desenvolvidas utilizando Java Swing.
 
-```text
-br.com.sistema.view
-```
-
-Classes:
+Classes previstas:
 
 ```text
 LoginView.java
@@ -477,15 +179,11 @@ MatriculaView.java
 
 ---
 
-# Pacote JDBC
+## `br.com.sistema.jdbc`
 
-Responsável pela conexão com o banco de dados.
+Responsável pela configuração e gerenciamento da conexão com o banco de dados.
 
-```text
-br.com.sistema.jdbc
-```
-
-Classe:
+Classe prevista:
 
 ```text
 ConexaoBanco.java
@@ -493,15 +191,11 @@ ConexaoBanco.java
 
 ---
 
-# Pacote Main
+## `br.com.sistema.main`
 
 Responsável pela inicialização da aplicação.
 
-```text
-br.com.sistema.main
-```
-
-Classe:
+Classe prevista:
 
 ```text
 Main.java
@@ -509,14 +203,22 @@ Main.java
 
 ---
 
-# Estrutura Simplificada das Classes
+# Entidades Principais
+
+## Usuário
 
 ```text
 Usuario
 ├── idUsuario
 ├── usuario
 └── senha
+```
 
+---
+
+## Aluno
+
+```text
 Aluno
 ├── idAluno
 ├── nome
@@ -526,7 +228,13 @@ Aluno
 ├── email
 ├── endereco
 └── ativo
+```
 
+---
+
+## Plano
+
+```text
 Plano
 ├── idPlano
 ├── nome
@@ -534,7 +242,13 @@ Plano
 ├── valor
 ├── descricao
 └── ativo
+```
 
+---
+
+## Matrícula
+
+```text
 Matricula
 ├── idMatricula
 ├── aluno
@@ -544,6 +258,22 @@ Matricula
 ├── valor
 └── situacao
 ```
+
+---
+
+# Relacionamento das Entidades
+
+O sistema possuirá o seguinte relacionamento principal:
+
+```text
+Aluno 1 -------- N Matricula N -------- 1 Plano
+```
+
+Um aluno poderá possuir várias matrículas ao longo do tempo.
+
+Um plano poderá estar associado a várias matrículas.
+
+Cada matrícula estará vinculada a apenas um aluno e um plano.
 
 ---
 
@@ -558,16 +288,58 @@ Matricula
 
 ---
 
-# Possíveis Funcionalidades Futuras
+# Documentação
 
-Caso as funcionalidades obrigatórias sejam concluídas, poderão ser adicionados novos módulos.
+A documentação complementar do projeto estará disponível em arquivos separados.
 
-Exemplos:
+Exemplo:
+
+```text
+docs/
+├── requisitos-funcionais-regras-negocio.md
+├── diagrama-caso-uso
+├── diagrama-classes
+└── diagrama-atividades
+```
+
+---
+
+# Estrutura Prevista do Repositório
+
+```text
+GymProjeto/
+├── src/
+│   └── br/
+│       └── com/
+│           └── sistema/
+│               ├── dao/
+│               ├── jdbc/
+│               ├── main/
+│               ├── model/
+│               └── view/
+│
+├── docs/
+│   ├── requisitos-funcionais-regras-negocio.md
+│   ├── diagrama-caso-uso/
+│   ├── diagrama-classes/
+│   └── diagrama-atividades/
+│
+├── database/
+│   └── script.sql
+│
+└── README.md
+```
+
+---
+
+# Possíveis Melhorias Futuras
+
+Após a conclusão das funcionalidades principais, poderão ser adicionadas novas funcionalidades ao sistema, como:
 
 * Cadastro de instrutores;
 * Cadastro de exercícios;
 * Montagem de treinos;
-* Controle de frequência;
+* Registro de frequência;
 * Controle de pagamentos;
 * Histórico de matrículas;
 * Relatórios.
@@ -584,6 +356,11 @@ Em desenvolvimento
 
 # Integrantes
 
-* Joãp Gabriel Gnoatto Arataque;
-* Gabriel Alvise Schenorberger.
+* Gabriel Alvise Schenorberger
+* João Gabriel Gnoatto Arataque
 
+---
+
+# Disciplina
+
+Projeto acadêmico desenvolvido para a disciplina de desenvolvimento de sistemas utilizando Java Swing.

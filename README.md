@@ -170,11 +170,11 @@ Responsável pelas interfaces gráficas desenvolvidas utilizando Java Swing.
 Classes previstas:
 
 ```text
-LoginView.java
-MenuPrincipalView.java
-AlunoView.java
-PlanoView.java
-MatriculaView.java
+FrmLogin.java
+FrmMenuPrincipal.java
+FrmAluno.java
+FrmPlano.java
+FrmMatricula.java
 ```
 
 ---

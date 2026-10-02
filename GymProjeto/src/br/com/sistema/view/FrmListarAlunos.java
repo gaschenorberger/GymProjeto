@@ -284,7 +284,8 @@ public class FrmListarAlunos extends JFrame {
             return;
         }
 
-        new FrmCadastroAluno().setVisible(true);
+        int id = Integer.parseInt(modelTabela.getValueAt(linha, 0).toString());
+        new FrmCadastroAluno(id).setVisible(true);
         this.dispose();
     }
 
@@ -301,9 +302,10 @@ public class FrmListarAlunos extends JFrame {
         int resp = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir o aluno " + nome + "?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (resp == JOptionPane.YES_OPTION) {
             AlunoDAO dao = new AlunoDAO();
-            dao.excluir(id);
-            JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            pesquisarAlunos();
+            if (dao.excluir(id)) {
+                JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                pesquisarAlunos();
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -316,10 +318,8 @@ public class FrmListarAlunos extends JFrame {
 
         int id = Integer.parseInt(modelTabela.getValueAt(linha, 0).toString());
         AlunoDAO dao = new AlunoDAO();
-        List<Aluno> todos = dao.listarTodos();
-
-        for (Aluno a : todos) {
-            if (a.getId() == id) {
+        Aluno a = dao.buscar(id);
+        if (a != null) {
                 String msg = "<html><body style='width: 300px; font-family: Segoe UI; padding: 5px;'>"
                         + "<h2><b>" + a.getNome() + "</b></h2>"
                         + "<hr>"
@@ -335,8 +335,7 @@ public class FrmListarAlunos extends JFrame {
                         + "</body></html>";
 
                 JOptionPane.showMessageDialog(this, msg, "Ficha do Aluno", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+            return;
         }
     }
 

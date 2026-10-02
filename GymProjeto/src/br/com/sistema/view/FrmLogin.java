@@ -144,7 +144,7 @@ public class FrmLogin extends JFrame {
         }
 
         UsuarioDAO dao = new UsuarioDAO();
-        if (dao.efetuARLogin(email, senha)) {
+        if (dao.efetuarLogin(email, senha)) {
             JOptionPane.showMessageDialog(this, "Seja bem-vindo(a) ao GymProjeto!", "Login Aprovado", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
             new FrmMenuPrincipal().setVisible(true);

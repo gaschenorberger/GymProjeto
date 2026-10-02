@@ -13,6 +13,10 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -57,6 +61,11 @@ public class FrmCadastroAluno extends JFrame {
     public FrmCadastroAluno() {
         initComponents();
         carregarTabela();
+    }
+
+    public FrmCadastroAluno(int id) {
+        this();
+        carregarAluno(id);
     }
 
     private void initComponents() {
@@ -326,57 +335,36 @@ public class FrmCadastroAluno extends JFrame {
 
     private void carregarCamposDaTabela() {
         int linha = tabelaAlunos.getSelectedRow();
-        if (linha != -1) {
-            int id = Integer.parseInt(modelTabela.getValueAt(linha, 0).toString());
-            AlunoDAO dao = new AlunoDAO();
-            List<Aluno> todos = dao.listarTodos();
-            for (Aluno a : todos) {
-                if (a.getId() == id) {
-                    txtId.setText(String.valueOf(a.getId()));
-                    txtNome.setText(a.getNome());
-                    txtCpf.setText(a.getCpf());
-                    txtEmail.setText(a.getEmail());
-                    txtTelefone.setText(a.getTelefone());
-                    txtDataNascimento.setText(a.getDataNascimento());
-                    txtEndereco.setText(a.getEndereco());
-                    txtNumero.setText(a.getNumero());
-                    txtBairro.setText(a.getBairro());
-                    txtCidade.setText(a.getCidade());
-                    cbEstado.setSelectedItem(a.getEstado());
-                    cbPlano.setSelectedItem(a.getPlano());
-                    cbStatus.setSelectedItem(a.getStatus());
-                    break;
-                }
-            }
-        }
+        if (linha != -1) carregarAluno(Integer.parseInt(modelTabela.getValueAt(linha, 0).toString()));
+    }
+
+    private void carregarAluno(int id) {
+        Aluno aluno = new AlunoDAO().buscar(id);
+        if (aluno == null) return;
+        txtId.setText(String.valueOf(aluno.getId()));
+        txtNome.setText(aluno.getNome());
+        txtCpf.setText(aluno.getCpf());
+        txtEmail.setText(aluno.getEmail());
+        txtTelefone.setText(aluno.getTelefone());
+        txtDataNascimento.setText(aluno.getDataNascimento());
+        txtEndereco.setText(aluno.getEndereco());
+        txtNumero.setText(aluno.getNumero());
+        txtBairro.setText(aluno.getBairro());
+        txtCidade.setText(aluno.getCidade());
+        cbEstado.setSelectedItem(aluno.getEstado());
+        cbPlano.setSelectedItem(aluno.getPlano());
+        cbStatus.setSelectedItem(aluno.getStatus());
     }
 
     private void salvarAluno() {
-        if (txtNome.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha o Nome e E-mail do Aluno!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Aluno a = new Aluno();
-        a.setNome(txtNome.getText().trim());
-        a.setCpf(txtCpf.getText().trim());
-        a.setEmail(txtEmail.getText().trim());
-        a.setTelefone(txtTelefone.getText().trim());
-        a.setDataNascimento(txtDataNascimento.getText().trim());
-        a.setEndereco(txtEndereco.getText().trim());
-        a.setNumero(txtNumero.getText().trim());
-        a.setBairro(txtBairro.getText().trim());
-        a.setCidade(txtCidade.getText().trim());
-        a.setEstado(cbEstado.getSelectedItem().toString());
-        a.setPlano(cbPlano.getSelectedItem().toString());
-        a.setStatus(cbStatus.getSelectedItem().toString());
-
+        if (!validarAluno(0)) return;
+        Aluno a = montarAluno();
         AlunoDAO dao = new AlunoDAO();
-        dao.salvar(a);
-
-        JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        limparCampos();
-        carregarTabela();
+        if (dao.salvar(a)) {
+            JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            limparCampos();
+            carregarTabela();
+        } else JOptionPane.showMessageDialog(this, "Não foi possível cadastrar o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
     }
 
     private void editarAluno() {
@@ -385,27 +373,16 @@ public class FrmCadastroAluno extends JFrame {
             return;
         }
 
-        Aluno a = new Aluno();
-        a.setId(Integer.parseInt(txtId.getText()));
-        a.setNome(txtNome.getText().trim());
-        a.setCpf(txtCpf.getText().trim());
-        a.setEmail(txtEmail.getText().trim());
-        a.setTelefone(txtTelefone.getText().trim());
-        a.setDataNascimento(txtDataNascimento.getText().trim());
-        a.setEndereco(txtEndereco.getText().trim());
-        a.setNumero(txtNumero.getText().trim());
-        a.setBairro(txtBairro.getText().trim());
-        a.setCidade(txtCidade.getText().trim());
-        a.setEstado(cbEstado.getSelectedItem().toString());
-        a.setPlano(cbPlano.getSelectedItem().toString());
-        a.setStatus(cbStatus.getSelectedItem().toString());
-
+        int id = Integer.parseInt(txtId.getText());
+        if (!validarAluno(id)) return;
+        Aluno a = montarAluno();
+        a.setId(id);
         AlunoDAO dao = new AlunoDAO();
-        dao.editar(a);
-
-        JOptionPane.showMessageDialog(this, "Dados do aluno atualizados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        limparCampos();
-        carregarTabela();
+        if (dao.editar(a)) {
+            JOptionPane.showMessageDialog(this, "Dados do aluno atualizados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            limparCampos();
+            carregarTabela();
+        } else JOptionPane.showMessageDialog(this, "Não foi possível atualizar o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
     }
 
     private void excluirAluno() {
@@ -418,11 +395,61 @@ public class FrmCadastroAluno extends JFrame {
         if (resp == JOptionPane.YES_OPTION) {
             int id = Integer.parseInt(txtId.getText());
             AlunoDAO dao = new AlunoDAO();
-            dao.excluir(id);
-            JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-            carregarTabela();
+            if (dao.excluir(id)) {
+                JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limparCampos();
+                carregarTabela();
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private boolean validarAluno(int id) {
+        String nome = txtNome.getText().trim();
+        String cpf = txtCpf.getText().trim();
+        String email = txtEmail.getText().trim();
+        String data = txtDataNascimento.getText().trim();
+        if (nome.isEmpty() || cpf.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nome e CPF são obrigatórios!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (cpf.replaceAll("\\D", "").length() != 11) {
+            JOptionPane.showMessageDialog(this, "Informe um CPF com 11 dígitos!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (new AlunoDAO().cpfExiste(cpf, id)) {
+            JOptionPane.showMessageDialog(this, "Já existe um aluno cadastrado com este CPF!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!email.isEmpty() && !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            JOptionPane.showMessageDialog(this, "Informe um e-mail válido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!data.isEmpty()) {
+            try {
+                LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(this, "Informe a data no formato dd/MM/aaaa!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Aluno montarAluno() {
+        Aluno aluno = new Aluno();
+        aluno.setNome(txtNome.getText().trim());
+        aluno.setCpf(txtCpf.getText().trim());
+        aluno.setEmail(txtEmail.getText().trim());
+        aluno.setTelefone(txtTelefone.getText().trim());
+        aluno.setDataNascimento(txtDataNascimento.getText().trim());
+        aluno.setEndereco(txtEndereco.getText().trim());
+        aluno.setNumero(txtNumero.getText().trim());
+        aluno.setBairro(txtBairro.getText().trim());
+        aluno.setCidade(txtCidade.getText().trim());
+        aluno.setEstado(cbEstado.getSelectedItem().toString());
+        aluno.setPlano(cbPlano.getSelectedItem().toString());
+        aluno.setStatus(cbStatus.getSelectedItem().toString());
+        return aluno;
     }
 
     private void limparCampos() {

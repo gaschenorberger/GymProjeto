@@ -289,25 +289,15 @@ public class FrmCadastroPlano extends JFrame {
     }
 
     private void salvarPlano() {
-        if (txtNome.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, informe o Nome do Plano!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         try {
-            Plano p = new Plano();
-            p.setNome(txtNome.getText().trim());
-            p.setDuracaoMeses(Integer.parseInt(txtDuracao.getText().trim()));
-            p.setValor(Double.parseDouble(txtValor.getText().trim().replace("R$", "").replace(",", ".")));
-            p.setSituacao(cbSituacao.getSelectedItem().toString());
-            p.setDescricao(txtDescricao.getText().trim());
-
+            Plano p = montarPlano();
+            if (!validarPlano(p)) return;
             PlanoDAO dao = new PlanoDAO();
-            dao.salvar(p);
-
-            JOptionPane.showMessageDialog(this, "Plano cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-            carregarTabela();
+            if (dao.salvar(p)) {
+                JOptionPane.showMessageDialog(this, "Plano cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limparCampos();
+                carregarTabela();
+            } else JOptionPane.showMessageDialog(this, "Não foi possível cadastrar o plano.", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha a Duração e o Valor com números válidos!", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
         }
@@ -320,20 +310,15 @@ public class FrmCadastroPlano extends JFrame {
         }
 
         try {
-            Plano p = new Plano();
+            Plano p = montarPlano();
             p.setId(Integer.parseInt(txtId.getText()));
-            p.setNome(txtNome.getText().trim());
-            p.setDuracaoMeses(Integer.parseInt(txtDuracao.getText().trim()));
-            p.setValor(Double.parseDouble(txtValor.getText().trim().replace("R$", "").replace(",", ".")));
-            p.setSituacao(cbSituacao.getSelectedItem().toString());
-            p.setDescricao(txtDescricao.getText().trim());
-
+            if (!validarPlano(p)) return;
             PlanoDAO dao = new PlanoDAO();
-            dao.editar(p);
-
-            JOptionPane.showMessageDialog(this, "Plano atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-            carregarTabela();
+            if (dao.editar(p)) {
+                JOptionPane.showMessageDialog(this, "Plano atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limparCampos();
+                carregarTabela();
+            } else JOptionPane.showMessageDialog(this, "Não foi possível atualizar o plano.", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Por favor, verifique os campos numéricos!", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
         }
@@ -349,11 +334,34 @@ public class FrmCadastroPlano extends JFrame {
         if (resp == JOptionPane.YES_OPTION) {
             int id = Integer.parseInt(txtId.getText());
             PlanoDAO dao = new PlanoDAO();
-            dao.excluir(id);
-            JOptionPane.showMessageDialog(this, "Plano excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-            carregarTabela();
+            if (dao.excluir(id)) {
+                JOptionPane.showMessageDialog(this, "Plano excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limparCampos();
+                carregarTabela();
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o plano.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private Plano montarPlano() {
+        Plano plano = new Plano();
+        plano.setNome(txtNome.getText().trim());
+        plano.setDuracaoMeses(Integer.parseInt(txtDuracao.getText().trim()));
+        plano.setValor(Double.parseDouble(txtValor.getText().trim().replace("R$", "").replace(",", ".")));
+        plano.setSituacao(cbSituacao.getSelectedItem().toString());
+        plano.setDescricao(txtDescricao.getText().trim());
+        return plano;
+    }
+
+    private boolean validarPlano(Plano plano) {
+        if (plano.getNome().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, informe o Nome do Plano!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (plano.getDuracaoMeses() <= 0 || plano.getValor() <= 0) {
+            JOptionPane.showMessageDialog(this, "A Duração e o Valor devem ser maiores que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     private void limparCampos() {

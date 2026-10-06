@@ -31,7 +31,7 @@ Aplicação desktop em Java Swing para gerenciar alunos, planos e matrículas de
 2. Execute a classe `br.com.sistema.main.Main`.
 3. Entre com:
    - e-mail: `admin@gymprojeto.com`
-   - senha: `123456`
+   - senha: `123`
 
 Sem o PostgreSQL, a aplicação inicia em modo demonstrativo e mantém os dados somente enquanto estiver aberta. O motivo da indisponibilidade do banco é informado no console.
 
@@ -58,8 +58,6 @@ Exemplo:
 ```text
 java -Dgym.db.user=usuario -Dgym.db.password=senha -jar GymProjeto.jar
 ```
-
-As senhas são comparadas por hash SHA-256; o banco não armazena a senha em texto puro.
 
 ## Estrutura do projeto
 
@@ -91,7 +89,7 @@ GymProjeto/
 - `br.com.sistema.dao`: operações JDBC e modo demonstrativo das entidades;
 - `br.com.sistema.view`: telas Java Swing;
 - `br.com.sistema.jdbc`: configuração centralizada da conexão;
-- `br.com.sistema.util`: validação de CPF, datas e senhas;
+- `br.com.sistema.util`: validação de CPF e datas;
 - `br.com.sistema.main`: inicialização da aplicação.
 
 ## Documentação

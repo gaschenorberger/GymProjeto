@@ -204,22 +204,6 @@ public class FrmCadastroMatricula extends JFrame {
         pnlConteudo.add(pnlTabela, BorderLayout.CENTER);
         pnlCenter.add(pnlConteudo, BorderLayout.CENTER);
         add(pnlCenter, BorderLayout.CENTER);
-
-        JPanel pnlFooter = new JPanel(new BorderLayout());
-        pnlFooter.setBackground(Color.WHITE);
-        pnlFooter.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 220)),
-                BorderFactory.createEmptyBorder(8, 20, 8, 20)
-        ));
-        JLabel lblFooter = new JLabel("GymProjeto | Sistema de Gerenciamento");
-        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblFooter.setForeground(new Color(100, 100, 100));
-        JLabel lblUser = new JLabel("Usuário: admin");
-        lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblUser.setForeground(new Color(100, 100, 100));
-        pnlFooter.add(lblFooter, BorderLayout.WEST);
-        pnlFooter.add(lblUser, BorderLayout.EAST);
-        add(pnlFooter, BorderLayout.SOUTH);
     }
 
     private JButton criarBotaoAcao(String texto) {

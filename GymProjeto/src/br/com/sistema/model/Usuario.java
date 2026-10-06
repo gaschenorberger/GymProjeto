@@ -4,16 +4,16 @@ public class Usuario {
     private int id;
     private String nome;
     private String email;
-    private String senhaHash;
+    private String senha;
     private String perfil;
 
     public Usuario() {}
 
-    public Usuario(int id, String nome, String email, String senhaHash, String perfil) {
+    public Usuario(int id, String nome, String email, String senha, String perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.senhaHash = senhaHash;
+        this.senha = senha;
         this.perfil = perfil;
     }
 
@@ -26,8 +26,8 @@ public class Usuario {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getSenhaHash() { return senhaHash; }
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
     public String getPerfil() { return perfil; }
     public void setPerfil(String perfil) { this.perfil = perfil; }

@@ -99,7 +99,7 @@ public class FrmLogin extends JFrame {
         // Campo Senha
         txtSenha = new JPasswordField(15);
         txtSenha.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        txtSenha.setText("123456");
+        txtSenha.setText("123");
         gbc.gridx = 1;
         cardPanel.add(txtSenha, gbc);
 

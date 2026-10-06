@@ -447,10 +447,6 @@ O sistema deverá executar em Java 8 ou superior e utilizar Java Swing.
 
 Quando configurado com PostgreSQL, o sistema deverá persistir os dados através de JDBC. Na ausência do banco ou do driver, poderá operar em modo demonstrativo em memória, informando essa condição no console.
 
-## RNF03 - Segurança das Credenciais
-
-As senhas persistidas deverão ser armazenadas como hash SHA-256, sem texto puro no banco de dados.
-
-## RNF04 - Usabilidade
+## RNF03 - Usabilidade
 
 As telas deverão manter identidade visual consistente, apresentar mensagens claras e solicitar confirmação antes de exclusões.

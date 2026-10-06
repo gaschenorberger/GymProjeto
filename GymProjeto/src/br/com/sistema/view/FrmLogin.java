@@ -23,6 +23,8 @@ import javax.swing.UIManager;
 
 public class FrmLogin extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private JTextField txtEmail;
     private JPasswordField txtSenha;
     private JButton btnEntrar;

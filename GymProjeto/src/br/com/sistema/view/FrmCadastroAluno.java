@@ -1,7 +1,11 @@
 package br.com.sistema.view;
 
 import br.com.sistema.dao.AlunoDAO;
+import br.com.sistema.dao.PlanoDAO;
 import br.com.sistema.model.Aluno;
+import br.com.sistema.model.Plano;
+import br.com.sistema.util.CpfValidator;
+import br.com.sistema.util.DateUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -14,9 +18,10 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,9 +36,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableModel;
 
 public class FrmCadastroAluno extends JFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private JTextField txtId;
     private JTextField txtNome;
@@ -60,6 +69,7 @@ public class FrmCadastroAluno extends JFrame {
 
     public FrmCadastroAluno() {
         initComponents();
+        carregarPlanos();
         carregarTabela();
     }
 
@@ -201,6 +211,7 @@ public class FrmCadastroAluno extends JFrame {
         txtDataNascimento = new JTextField();
         JButton btnCal = new JButton("📅");
         btnCal.setMargin(new Insets(0, 4, 0, 4));
+        btnCal.addActionListener(e -> escolherDataNascimento());
         pnlData.add(txtDataNascimento, BorderLayout.CENTER);
         pnlData.add(btnCal, BorderLayout.EAST);
         pnlDados.add(pnlData, gbc);
@@ -215,7 +226,7 @@ public class FrmCadastroAluno extends JFrame {
         pnlDados.add(new JLabel("Status:"), gbc);
 
         gbc.gridy = 9; gbc.gridx = 0;
-        cbPlano = new JComboBox<>(new String[]{"Musculação", "Funcional", "Crossfit"});
+        cbPlano = new JComboBox<>();
         pnlDados.add(cbPlano, gbc);
 
         gbc.gridx = 1;
@@ -233,10 +244,10 @@ public class FrmCadastroAluno extends JFrame {
                 new Font("Segoe UI", Font.BOLD, 13), new Color(40, 40, 40)
         ));
 
-        btnSalvar = criarBotaoAcao("💾 Salvar");
-        btnEditar = criarBotaoAcao("✏️ Editar");
-        btnExcluir = criarBotaoAcao("🗑️ Excluir");
-        btnLimpar = criarBotaoAcao("🧹 Limpar Campos");
+        btnSalvar = criarBotaoAcao("Salvar");
+        btnEditar = criarBotaoAcao("Editar");
+        btnExcluir = criarBotaoAcao("Excluir");
+        btnLimpar = criarBotaoAcao("Limpar Campos");
 
         btnSalvar.addActionListener(e -> salvarAluno());
         btnEditar.addActionListener(e -> editarAluno());
@@ -258,6 +269,8 @@ public class FrmCadastroAluno extends JFrame {
         ));
 
         modelTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "CPF", "E-mail", "Telefone", "Data Nasc.", "Plano", "Status"}, 0) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -326,7 +339,7 @@ public class FrmCadastroAluno extends JFrame {
                 a.getCpf(),
                 a.getEmail(),
                 a.getTelefone(),
-                a.getDataNascimento(),
+                DateUtils.format(a.getDataNascimento()),
                 a.getPlano(),
                 a.getStatus()
             });
@@ -346,13 +359,13 @@ public class FrmCadastroAluno extends JFrame {
         txtCpf.setText(aluno.getCpf());
         txtEmail.setText(aluno.getEmail());
         txtTelefone.setText(aluno.getTelefone());
-        txtDataNascimento.setText(aluno.getDataNascimento());
+        txtDataNascimento.setText(DateUtils.format(aluno.getDataNascimento()));
         txtEndereco.setText(aluno.getEndereco());
         txtNumero.setText(aluno.getNumero());
         txtBairro.setText(aluno.getBairro());
         txtCidade.setText(aluno.getCidade());
         cbEstado.setSelectedItem(aluno.getEstado());
-        cbPlano.setSelectedItem(aluno.getPlano());
+        selecionarPlano(aluno.getPlano());
         cbStatus.setSelectedItem(aluno.getStatus());
     }
 
@@ -399,7 +412,7 @@ public class FrmCadastroAluno extends JFrame {
                 JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 limparCampos();
                 carregarTabela();
-            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno. Verifique se ele possui matrículas vinculadas.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -412,8 +425,8 @@ public class FrmCadastroAluno extends JFrame {
             JOptionPane.showMessageDialog(this, "Nome e CPF são obrigatórios!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        if (cpf.replaceAll("\\D", "").length() != 11) {
-            JOptionPane.showMessageDialog(this, "Informe um CPF com 11 dígitos!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        if (!CpfValidator.isValid(cpf)) {
+            JOptionPane.showMessageDialog(this, "Informe um CPF válido!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         if (new AlunoDAO().cpfExiste(cpf, id)) {
@@ -426,7 +439,11 @@ public class FrmCadastroAluno extends JFrame {
         }
         if (!data.isEmpty()) {
             try {
-                LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+                LocalDate nascimento = DateUtils.parse(data);
+                if (nascimento.isAfter(LocalDate.now())) {
+                    JOptionPane.showMessageDialog(this, "A data de nascimento não pode estar no futuro!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
             } catch (DateTimeParseException e) {
                 JOptionPane.showMessageDialog(this, "Informe a data no formato dd/MM/aaaa!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 return false;
@@ -441,13 +458,14 @@ public class FrmCadastroAluno extends JFrame {
         aluno.setCpf(txtCpf.getText().trim());
         aluno.setEmail(txtEmail.getText().trim());
         aluno.setTelefone(txtTelefone.getText().trim());
-        aluno.setDataNascimento(txtDataNascimento.getText().trim());
+        String nascimento = txtDataNascimento.getText().trim();
+        aluno.setDataNascimento(nascimento.isEmpty() ? null : DateUtils.parse(nascimento));
         aluno.setEndereco(txtEndereco.getText().trim());
         aluno.setNumero(txtNumero.getText().trim());
         aluno.setBairro(txtBairro.getText().trim());
         aluno.setCidade(txtCidade.getText().trim());
         aluno.setEstado(cbEstado.getSelectedItem().toString());
-        aluno.setPlano(cbPlano.getSelectedItem().toString());
+        aluno.setPlano(cbPlano.getSelectedItem() == null ? "" : cbPlano.getSelectedItem().toString());
         aluno.setStatus(cbStatus.getSelectedItem().toString());
         return aluno;
     }
@@ -464,9 +482,44 @@ public class FrmCadastroAluno extends JFrame {
         txtBairro.setText("");
         txtCidade.setText("");
         cbEstado.setSelectedIndex(0);
-        cbPlano.setSelectedIndex(0);
+        if (cbPlano.getItemCount() > 0) cbPlano.setSelectedIndex(0);
         cbStatus.setSelectedIndex(0);
         tabelaAlunos.clearSelection();
+    }
+
+    private void carregarPlanos() {
+        cbPlano.removeAllItems();
+        for (Plano plano : new PlanoDAO().listarAtivos()) cbPlano.addItem(plano.getNome());
+    }
+
+    private void selecionarPlano(String nomePlano) {
+        if (nomePlano == null || nomePlano.trim().isEmpty()) return;
+        for (int i = 0; i < cbPlano.getItemCount(); i++) {
+            if (nomePlano.equalsIgnoreCase(cbPlano.getItemAt(i))) {
+                cbPlano.setSelectedIndex(i);
+                return;
+            }
+        }
+        cbPlano.addItem(nomePlano);
+        cbPlano.setSelectedItem(nomePlano);
+    }
+
+    private void escolherDataNascimento() {
+        Date inicial = new Date();
+        String atual = txtDataNascimento.getText().trim();
+        if (!atual.isEmpty()) {
+            try {
+                inicial = Date.from(DateUtils.parse(atual).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            } catch (DateTimeParseException ignored) {}
+        }
+        JSpinner seletor = new JSpinner(new SpinnerDateModel(inicial, null, new Date(), Calendar.DAY_OF_MONTH));
+        seletor.setEditor(new JSpinner.DateEditor(seletor, "dd/MM/yyyy"));
+        int resposta = JOptionPane.showConfirmDialog(this, seletor, "Selecione a data de nascimento", JOptionPane.OK_CANCEL_OPTION);
+        if (resposta == JOptionPane.OK_OPTION) {
+            Date escolhida = (Date) seletor.getValue();
+            txtDataNascimento.setText(DateUtils.format(
+                    escolhida.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        }
     }
 
     public static void main(String args[]) {

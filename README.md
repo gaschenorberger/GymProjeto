@@ -1,366 +1,120 @@
 # Sistema de Gerenciamento de Academia
 
-Sistema desktop desenvolvido em **Java Swing** para auxiliar no gerenciamento básico de uma academia.
-
-O projeto permite realizar o controle de **alunos**, **planos** e **matrículas**, além de contar com autenticação de usuário e navegação através de um menu principal.
-
----
-
-# Sobre o Projeto
-
-O sistema foi desenvolvido com o objetivo de aplicar conceitos de análise, projeto e desenvolvimento de software utilizando Java.
-
-A aplicação possui interface gráfica construída com **Java Swing** e utiliza acesso a banco de dados através de **JDBC**.
-
-O sistema será composto pelos seguintes módulos principais:
-
-* Login;
-* Menu principal;
-* Cadastro de alunos;
-* Cadastro de planos;
-* Gerenciamento de matrículas.
-
----
-
-# Funcionalidades
-
-## Login
-
-O sistema possui uma tela de autenticação onde o usuário deverá informar:
-
-* Usuário;
-* Senha.
-
-Após a validação dos dados, o usuário será direcionado para o menu principal.
-
----
-
-## Menu Principal
-
-Através do menu principal será possível acessar as funcionalidades do sistema:
-
-* Alunos;
-* Planos;
-* Matrículas;
-* Sair.
-
----
-
-## Gerenciamento de Alunos
-
-O módulo de alunos permite realizar o controle dos alunos cadastrados na academia.
-
-Entre as principais operações estão:
-
-* Cadastrar aluno;
-* Visualizar alunos cadastrados;
-* Editar dados;
-* Excluir registros;
-* Limpar campos do formulário;
-* Selecionar registros através da tabela.
-
-### Dados do Aluno
-
-* Nome;
-* CPF;
-* Data de nascimento;
-* Telefone;
-* E-mail;
-* Endereço;
-* Situação.
-
----
-
-## Gerenciamento de Planos
-
-O módulo de planos permite cadastrar e administrar os planos oferecidos pela academia.
-
-### Dados do Plano
-
-* Nome;
-* Duração em meses;
-* Valor;
-* Descrição;
-* Situação.
-
-### Exemplos
-
-* Mensal;
-* Trimestral;
-* Semestral;
-* Anual.
-
----
-
-## Gerenciamento de Matrículas
-
-O módulo de matrículas será responsável por relacionar um aluno a determinado plano.
-
-### Dados da Matrícula
-
-* Aluno;
-* Plano;
-* Data de início;
-* Data de vencimento;
-* Valor;
-* Situação.
-
-### Situações
-
-* Ativa;
-* Vencida;
-* Cancelada.
-
----
-
-# Estrutura do Projeto
-
-O projeto será organizado utilizando os seguintes pacotes:
-
-```text
-src
-└── br
-    └── com
-        └── sistema
-            ├── dao
-            ├── jdbc
-            ├── main
-            ├── model
-            └── view
-```
-
----
-
-# Pacotes
-
-## `br.com.sistema.model`
-
-Responsável pelas classes que representam as entidades do sistema.
-
-Classes previstas:
-
-```text
-Usuario.java
-Aluno.java
-Plano.java
-Matricula.java
-```
-
----
-
-## `br.com.sistema.dao`
-
-Responsável pelas operações de acesso e manipulação dos dados no banco.
-
-Classes previstas:
-
-```text
-UsuarioDao.java
-AlunoDao.java
-PlanoDao.java
-MatriculaDao.java
-```
-
----
-
-## `br.com.sistema.view`
-
-Responsável pelas interfaces gráficas desenvolvidas utilizando Java Swing.
-
-Classes previstas:
-
-```text
-FrmLogin.java
-FrmMenuPrincipal.java
-FrmAluno.java
-FrmPlano.java
-FrmMatricula.java
-```
-
----
-
-## `br.com.sistema.jdbc`
-
-Responsável pela configuração e gerenciamento da conexão com o banco de dados.
-
-Classe prevista:
-
-```text
-ConexaoBanco.java
-```
-
----
-
-## `br.com.sistema.main`
-
-Responsável pela inicialização da aplicação.
-
-Classe prevista:
-
-```text
-Main.java
-```
-
----
-
-# Entidades Principais
-
-## Usuário
-
-```text
-Usuario
-├── idUsuario
-├── usuario
-└── senha
-```
-
----
-
-## Aluno
-
-```text
-Aluno
-├── idAluno
-├── nome
-├── cpf
-├── dataNascimento
-├── telefone
-├── email
-├── endereco
-└── ativo
-```
-
----
-
-## Plano
-
-```text
-Plano
-├── idPlano
-├── nome
-├── duracaoMeses
-├── valor
-├── descricao
-└── ativo
-```
-
----
-
-## Matrícula
-
-```text
-Matricula
-├── idMatricula
-├── aluno
-├── plano
-├── dataInicio
-├── dataVencimento
-├── valor
-└── situacao
-```
-
----
-
-# Relacionamento das Entidades
-
-O sistema possuirá o seguinte relacionamento principal:
-
-```text
-Aluno 1 -------- N Matricula N -------- 1 Plano
-```
-
-Um aluno poderá possuir várias matrículas ao longo do tempo.
-
-Um plano poderá estar associado a várias matrículas.
-
-Cada matrícula estará vinculada a apenas um aluno e um plano.
-
----
-
-# Tecnologias Utilizadas
-
-* Java;
-* Java Swing;
-* JDBC;
-* Banco de dados relacional;
-* Git;
-* GitHub.
-
----
-
-# Documentação
-
-A documentação complementar do projeto estará disponível em arquivos separados.
+Aplicação desktop em Java Swing para gerenciar alunos, planos e matrículas de uma academia. O projeto foi desenvolvido para o trabalho avaliativo de Java Swing e implementa as telas, operações CRUD, tabelas e documentação solicitadas no enunciado.
+
+## Funcionalidades
+
+- Login com validação de campos e credenciais;
+- menu principal com menus, submenus e atalhos visuais;
+- cadastro, edição, exclusão e listagem de alunos;
+- validação algorítmica e unicidade de CPF;
+- cadastro, edição, exclusão e listagem de planos;
+- cadastro, edição, exclusão e listagem de matrículas;
+- seleção somente de alunos e planos ativos para novas matrículas;
+- validação das datas, valor e situação da matrícula;
+- confirmação antes de exclusões;
+- proteção contra exclusão de registros que possuam vínculos;
+- tabelas com seleção por clique e carregamento dos dados no formulário;
+- persistência em MySQL com modo demonstrativo em memória quando o banco não estiver disponível.
+
+## Tecnologias
+
+- Java 8;
+- Java Swing;
+- JDBC;
+- MySQL 8;
+- Apache Ant / NetBeans.
+
+## Como executar rapidamente
+
+1. Abra a pasta `GymProjeto` no NetBeans.
+2. Execute a classe `br.com.sistema.main.Main`.
+3. Entre com:
+   - e-mail: `admin@gymprojeto.com`
+   - senha: `123456`
+
+Sem o MySQL, a aplicação inicia em modo demonstrativo e mantém os dados somente enquanto estiver aberta. O motivo da indisponibilidade do banco é informado no console.
+
+## Configuração do MySQL
+
+1. Execute [`database/script.sql`](database/script.sql) no MySQL 8.
+2. Baixe o MySQL Connector/J 8 e coloque o JAR em `GymProjeto/lib/`.
+3. No NetBeans, acesse **Propriedades do Projeto > Bibliotecas > Adicionar JAR/Pasta** e adicione o Connector/J.
+4. Por padrão, o sistema utiliza:
+   - URL: `jdbc:mysql://localhost:3306/bdgym`
+   - usuário: `root`
+   - senha vazia.
+
+Esses valores podem ser alterados sem modificar o código:
+
+| Configuração | Propriedade Java | Variável de ambiente |
+| --- | --- | --- |
+| URL | `gym.db.url` | `GYM_DB_URL` |
+| Usuário | `gym.db.user` | `GYM_DB_USER` |
+| Senha | `gym.db.password` | `GYM_DB_PASSWORD` |
 
 Exemplo:
 
 ```text
-docs/
-├── requisitos-funcionais-regras-negocio.md
-├── diagrama-caso-uso
-├── diagrama-classes
-└── diagrama-atividades
+java -Dgym.db.user=usuario -Dgym.db.password=senha -jar GymProjeto.jar
 ```
 
----
+As senhas são comparadas por hash SHA-256; o banco não armazena a senha em texto puro.
 
-# Estrutura Prevista do Repositório
+## Estrutura do projeto
 
 ```text
 GymProjeto/
-├── src/
-│   └── br/
-│       └── com/
-│           └── sistema/
-│               ├── dao/
-│               ├── jdbc/
-│               ├── main/
-│               ├── model/
-│               └── view/
-│
+├── database/
+│   └── script.sql
 ├── docs/
-│   ├── requisitos-funcionais-regras-negocio.md
+│   ├── requisitos-sistema.md
 │   ├── diagrama-caso-uso/
 │   ├── diagrama-classes/
 │   └── diagrama-atividades/
-│
-├── database/
-│   └── script.sql
-│
+├── GymProjeto/
+│   ├── lib/
+│   ├── src/br/com/sistema/
+│   │   ├── dao/
+│   │   ├── jdbc/
+│   │   ├── main/
+│   │   ├── model/
+│   │   ├── util/
+│   │   └── view/
+│   └── test/br/com/sistema/
 └── README.md
 ```
 
----
+## Organização dos pacotes
 
-# Possíveis Melhorias Futuras
+- `br.com.sistema.model`: `Usuario`, `Aluno`, `Plano` e `Matricula`;
+- `br.com.sistema.dao`: operações JDBC e modo demonstrativo das entidades;
+- `br.com.sistema.view`: telas Java Swing;
+- `br.com.sistema.jdbc`: configuração centralizada da conexão;
+- `br.com.sistema.util`: validação de CPF, datas e senhas;
+- `br.com.sistema.main`: inicialização da aplicação.
 
-Após a conclusão das funcionalidades principais, poderão ser adicionadas novas funcionalidades ao sistema, como:
+## Documentação
 
-* Cadastro de instrutores;
-* Cadastro de exercícios;
-* Montagem de treinos;
-* Registro de frequência;
-* Controle de pagamentos;
-* Histórico de matrículas;
-* Relatórios.
+- [Requisitos funcionais e regras de negócio](docs/requisitos-sistema.md)
+- [Diagrama de caso de uso](docs/diagrama-caso-uso/Diagrama%20de%20caso%20de%20uso.png)
+- [Diagrama de classes](docs/diagrama-classes/diagrama-classes.png)
+- [Atividade: Login](docs/diagrama-atividades/Realizar%20Login.png)
+- [Atividade: Aluno](docs/diagrama-atividades/Cadastrar%20Aluno.png)
+- [Atividade: Plano](docs/diagrama-atividades/Cadastrar%20Plano.png)
+- [Atividade: Matrícula](docs/diagrama-atividades/Cadastrar%20Matricula.png)
 
----
+## Integrantes
 
-# Status do Projeto
+- Gabriel Alvise Schenorberger
+- João Gabriel Gnoatto Arataque
 
-```text
-Em desenvolvimento
-```
+## Status
 
----
+Funcionalidades obrigatórias concluídas. A conexão MySQL depende apenas da instalação local do Connector/J e da execução do script fornecido.
 
-# Integrantes
+## Testes
 
-* Gabriel Alvise Schenorberger
-* João Gabriel Gnoatto Arataque
+O arquivo `GymProjeto/test/br/com/sistema/CoreValidationTest.java` verifica CPF, datas, autenticação, CRUD de matrícula e integridade dos vínculos. `UiStructureTest.java` confere menus, JTable, botões obrigatórios e o padrão visual das três telas de cadastro. Os testes podem ser executados como classes Java com as asserções habilitadas (`-ea`).
 
----
-
-# Disciplina
-
-Projeto acadêmico desenvolvido para a disciplina de desenvolvimento de sistemas utilizando Java Swing.
+O projeto também pode ser validado pelo NetBeans usando **Limpar e Construir**, que gera `GymProjeto/dist/GymProjeto.jar`.

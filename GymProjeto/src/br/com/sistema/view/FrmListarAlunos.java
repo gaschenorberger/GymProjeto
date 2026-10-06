@@ -1,7 +1,10 @@
 package br.com.sistema.view;
 
 import br.com.sistema.dao.AlunoDAO;
+import br.com.sistema.dao.PlanoDAO;
 import br.com.sistema.model.Aluno;
+import br.com.sistema.model.Plano;
+import br.com.sistema.util.DateUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,6 +34,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class FrmListarAlunos extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private JTextField txtFiltroNome;
     private JTextField txtFiltroEmail;
     private JComboBox<String> cbFiltroPlano;
@@ -48,6 +53,7 @@ public class FrmListarAlunos extends JFrame {
 
     public FrmListarAlunos() {
         initComponents();
+        carregarPlanosFiltro();
         pesquisarAlunos();
     }
 
@@ -130,7 +136,7 @@ public class FrmListarAlunos extends JFrame {
         pnlFiltros.add(txtFiltroEmail, gbc);
 
         gbc.gridx = 2;
-        cbFiltroPlano = new JComboBox<>(new String[]{"Todos", "Musculação", "Funcional", "Crossfit"});
+        cbFiltroPlano = new JComboBox<>(new String[]{"Todos"});
         cbFiltroPlano.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         pnlFiltros.add(cbFiltroPlano, gbc);
 
@@ -140,7 +146,7 @@ public class FrmListarAlunos extends JFrame {
         pnlFiltros.add(cbFiltroStatus, gbc);
 
         gbc.gridx = 4; gbc.weightx = 0.1;
-        btnPesquisar = new JButton("🔍 Pesquisar");
+        btnPesquisar = new JButton("Pesquisar");
         btnPesquisar.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         btnPesquisar.setFocusPainted(false);
         btnPesquisar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -159,6 +165,8 @@ public class FrmListarAlunos extends JFrame {
         ));
 
         modelTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "E-mail", "Telefone", "Plano", "Status"}, 0) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -172,6 +180,8 @@ public class FrmListarAlunos extends JFrame {
 
         // Renderizador customizado para exibir o Status com a cor exata (Verde para Ativo, Vermelho para Inativo)
         tabelaAlunos.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -205,9 +215,9 @@ public class FrmListarAlunos extends JFrame {
         JPanel pnlBotoesAcao = new JPanel(new GridLayout(1, 3, 10, 0));
         pnlBotoesAcao.setOpaque(false);
 
-        btnEditar = criarBotaoAcao("✏️ Editar");
-        btnExcluir = criarBotaoAcao("🗑️ Excluir");
-        btnVerDetalhes = criarBotaoAcao("📜 Ver Detalhes");
+        btnEditar = criarBotaoAcao("Editar");
+        btnExcluir = criarBotaoAcao("Excluir");
+        btnVerDetalhes = criarBotaoAcao("Ver Detalhes");
 
         btnEditar.addActionListener(e -> editarAlunoSelecionado());
         btnExcluir.addActionListener(e -> excluirAlunoSelecionado());
@@ -305,7 +315,7 @@ public class FrmListarAlunos extends JFrame {
             if (dao.excluir(id)) {
                 JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 pesquisarAlunos();
-            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o aluno. Verifique se ele possui matrículas vinculadas.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -327,7 +337,7 @@ public class FrmListarAlunos extends JFrame {
                         + "<p><b>CPF:</b> " + a.getCpf() + "</p>"
                         + "<p><b>E-mail:</b> " + a.getEmail() + "</p>"
                         + "<p><b>Telefone:</b> " + a.getTelefone() + "</p>"
-                        + "<p><b>Data Nasc.:</b> " + a.getDataNascimento() + "</p>"
+                        + "<p><b>Data Nasc.:</b> " + DateUtils.format(a.getDataNascimento()) + "</p>"
                         + "<p><b>Endereço:</b> " + a.getEndereco() + ", " + a.getNumero() + " - " + a.getBairro() + "</p>"
                         + "<p><b>Cidade/UF:</b> " + a.getCidade() + "/" + a.getEstado() + "</p>"
                         + "<p><b>Plano:</b> " + a.getPlano() + "</p>"
@@ -337,6 +347,10 @@ public class FrmListarAlunos extends JFrame {
                 JOptionPane.showMessageDialog(this, msg, "Ficha do Aluno", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+    }
+
+    private void carregarPlanosFiltro() {
+        for (Plano plano : new PlanoDAO().listarTodos()) cbFiltroPlano.addItem(plano.getNome());
     }
 
     public static void main(String args[]) {

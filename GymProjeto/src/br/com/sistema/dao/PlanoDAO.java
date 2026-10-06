@@ -20,10 +20,11 @@ public class PlanoDAO {
     }
 
     public boolean salvar(Plano plano) {
+        if (!valido(plano)) return false;
         Connection conn = ConnectionFactory.getConnection();
         if (conn == null) {
             plano.setId(proximoId++);
-            emMemoria.add(plano);
+            synchronized (emMemoria) { emMemoria.add(plano); }
             return true;
         }
         String sql = "INSERT INTO tb_planos (nome, duracao_meses, valor, situacao, descricao) VALUES (?,?,?,?,?)";
@@ -37,12 +38,19 @@ public class PlanoDAO {
     }
 
     public boolean editar(Plano plano) {
+        if (!valido(plano)) return false;
+        Plano anterior = buscar(plano.getId());
         Connection conn = ConnectionFactory.getConnection();
         if (conn == null) {
-            for (int i = 0; i < emMemoria.size(); i++) {
-                if (emMemoria.get(i).getId() == plano.getId()) {
-                    emMemoria.set(i, plano);
-                    return true;
+            synchronized (emMemoria) {
+                for (int i = 0; i < emMemoria.size(); i++) {
+                    if (emMemoria.get(i).getId() == plano.getId()) {
+                        emMemoria.set(i, plano);
+                        if (anterior != null && !anterior.getNome().equalsIgnoreCase(plano.getNome())) {
+                            new AlunoDAO().atualizarNomePlano(anterior.getNome(), plano.getNome());
+                        }
+                        return true;
+                    }
                 }
             }
             return false;
@@ -51,7 +59,11 @@ public class PlanoDAO {
         try (Connection conexao = conn; PreparedStatement stmt = conexao.prepareStatement(sql)) {
             preencher(stmt, plano);
             stmt.setInt(6, plano.getId());
-            return stmt.executeUpdate() > 0;
+            boolean atualizado = stmt.executeUpdate() > 0;
+            if (atualizado && anterior != null && !anterior.getNome().equalsIgnoreCase(plano.getNome())) {
+                new AlunoDAO().atualizarNomePlano(anterior.getNome(), plano.getNome());
+            }
+            return atualizado;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -59,8 +71,13 @@ public class PlanoDAO {
     }
 
     public boolean excluir(int id) {
+        Plano plano = buscar(id);
+        if (plano == null || MatriculaDAO.existeParaPlano(id)
+                || new AlunoDAO().planoEmUso(plano.getNome())) return false;
         Connection conn = ConnectionFactory.getConnection();
-        if (conn == null) return emMemoria.removeIf(plano -> plano.getId() == id);
+        if (conn == null) {
+            synchronized (emMemoria) { return emMemoria.removeIf(item -> item.getId() == id); }
+        }
         String sql = "DELETE FROM tb_planos WHERE id=?";
         try (Connection conexao = conn; PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -73,7 +90,9 @@ public class PlanoDAO {
 
     public List<Plano> listarTodos() {
         Connection conn = ConnectionFactory.getConnection();
-        if (conn == null) return new ArrayList<>(emMemoria);
+        if (conn == null) {
+            synchronized (emMemoria) { return new ArrayList<>(emMemoria); }
+        }
         List<Plano> lista = new ArrayList<>();
         String sql = "SELECT * FROM tb_planos ORDER BY nome";
         try (Connection conexao = conn; PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
@@ -84,11 +103,36 @@ public class PlanoDAO {
         return lista;
     }
 
+    public Plano buscar(int id) {
+        for (Plano plano : listarTodos()) if (plano.getId() == id) return plano;
+        return null;
+    }
+
+    public List<Plano> listarAtivos() {
+        List<Plano> ativos = new ArrayList<>();
+        for (Plano plano : listarTodos()) {
+            if ("Ativo".equalsIgnoreCase(plano.getSituacao())) ativos.add(plano);
+        }
+        return ativos;
+    }
+
     private void preencher(PreparedStatement stmt, Plano plano) throws Exception {
         stmt.setString(1, plano.getNome());
         stmt.setInt(2, plano.getDuracaoMeses());
         stmt.setDouble(3, plano.getValor());
         stmt.setString(4, plano.getSituacao());
         stmt.setString(5, plano.getDescricao());
+    }
+
+    private boolean valido(Plano plano) {
+        return plano != null
+                && plano.getNome() != null
+                && !plano.getNome().trim().isEmpty()
+                && plano.getDuracaoMeses() > 0
+                && plano.getValor() > 0
+                && !Double.isNaN(plano.getValor())
+                && !Double.isInfinite(plano.getValor())
+                && ("Ativo".equalsIgnoreCase(plano.getSituacao())
+                    || "Inativo".equalsIgnoreCase(plano.getSituacao()));
     }
 }

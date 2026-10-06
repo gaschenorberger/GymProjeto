@@ -12,7 +12,7 @@ Os requisitos funcionais descrevem as funcionalidades que o sistema deverá disp
 
 ## RF01 - Realizar Login
 
-O sistema deverá permitir que o usuário informe seu nome de usuário e senha para acessar o sistema.
+O sistema deverá permitir que o usuário informe seu e-mail de usuário e senha para acessar o sistema.
 
 ---
 
@@ -230,6 +230,8 @@ As regras de negócio representam condições e restrições que deverão ser re
 
 Não deverá ser permitido cadastrar mais de um aluno com o mesmo CPF.
 
+O CPF também deverá possuir 11 dígitos e dígitos verificadores válidos.
+
 ---
 
 ## RN02 - Nome do Aluno Obrigatório
@@ -415,3 +417,40 @@ Não deverá ser permitida a realização de uma matrícula utilizando um aluno 
 | RN17   | Apenas alunos ativos podem receber novas matrículas |
 | RN18   | Exclusões devem solicitar confirmação               |
 | RN19   | Matrícula deve utilizar aluno e plano existentes    |
+
+---
+
+# 5. Matriz de Rastreabilidade
+
+| Escopo | Implementação principal |
+| --- | --- |
+| RF01-RF02 | `FrmLogin` e `UsuarioDAO` |
+| RF03 e RF25 | `FrmMenuPrincipal` |
+| RF04-RF09 | `FrmCadastroAluno` e `AlunoDAO` |
+| RF10-RF15 | `FrmCadastroPlano` e `PlanoDAO` |
+| RF16-RF23 | `FrmCadastroMatricula` e `MatriculaDAO` |
+| RF24 | Mensagens nas telas Swing |
+| RN01-RN04 | Validações de aluno e `CpfValidator` |
+| RN05-RN08 | Validações de plano |
+| RN09-RN17 e RN19 | Validações de matrícula e chaves estrangeiras |
+| RN18 | Confirmações de exclusão nas três telas de cadastro |
+
+---
+
+# 6. Requisitos Não Funcionais
+
+## RNF01 - Plataforma
+
+O sistema deverá executar em Java 8 ou superior e utilizar Java Swing.
+
+## RNF02 - Persistência
+
+Quando configurado com MySQL, o sistema deverá persistir os dados através de JDBC. Na ausência do banco ou do driver, poderá operar em modo demonstrativo em memória, informando essa condição no console.
+
+## RNF03 - Segurança das Credenciais
+
+As senhas persistidas deverão ser armazenadas como hash SHA-256, sem texto puro no banco de dados.
+
+## RNF04 - Usabilidade
+
+As telas deverão manter identidade visual consistente, apresentar mensagens claras e solicitar confirmação antes de exclusões.

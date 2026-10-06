@@ -15,6 +15,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -22,6 +25,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class FrmMenuPrincipal extends JFrame {
+
+    private static final long serialVersionUID = 1L;
 
     public FrmMenuPrincipal() {
         initComponents();
@@ -34,6 +39,7 @@ public class FrmMenuPrincipal extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color(242, 242, 242));
         setLayout(new BorderLayout());
+        setJMenuBar(criarBarraMenu());
 
         // Painel Superior (Header)
         JPanel pnlHeader = new JPanel(new BorderLayout());
@@ -44,7 +50,7 @@ public class FrmMenuPrincipal extends JFrame {
         ));
 
         // Esquerda Logo
-        JLabel lblLogo = new JLabel("🏋️ GYMPROJETO");
+        JLabel lblLogo = new JLabel("GYMPROJETO");
         lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblLogo.setForeground(new Color(20, 20, 20));
         pnlHeader.add(lblLogo, BorderLayout.WEST);
@@ -60,13 +66,7 @@ public class FrmMenuPrincipal extends JFrame {
         btnSair.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         btnSair.setFocusPainted(false);
         btnSair.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnSair.addActionListener(e -> {
-            int resp = JOptionPane.showConfirmDialog(this, "Deseja realmente sair do sistema?", "Confirmação", JOptionPane.YES_NO_OPTION);
-            if (resp == JOptionPane.YES_OPTION) {
-                this.dispose();
-                new FrmLogin().setVisible(true);
-            }
-        });
+        btnSair.addActionListener(e -> sairDoSistema());
 
         pnlUserSair.add(lblUsuario);
         pnlUserSair.add(btnSair);
@@ -122,9 +122,17 @@ public class FrmMenuPrincipal extends JFrame {
             this.dispose();
         });
 
+        // 4. Cadastrar Matrícula
+        JButton btnCadMatricula = criarBotaoMenu("📝", "Cadastrar Matrícula");
+        btnCadMatricula.addActionListener(e -> {
+            new FrmCadastroMatricula().setVisible(true);
+            this.dispose();
+        });
+
         pnlButtons.add(btnCadAluno);
         pnlButtons.add(btnCadPlano);
         pnlButtons.add(btnListAlunos);
+        pnlButtons.add(btnCadMatricula);
 
         pnlCenter.add(pnlButtons, gbc);
         add(pnlCenter, BorderLayout.CENTER);
@@ -157,6 +165,47 @@ public class FrmMenuPrincipal extends JFrame {
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
         return btn;
+    }
+
+    private JMenuBar criarBarraMenu() {
+        JMenuBar barra = new JMenuBar();
+        JMenu cadastros = new JMenu("Cadastros");
+        JMenuItem alunos = new JMenuItem("Alunos");
+        JMenuItem planos = new JMenuItem("Planos");
+        JMenuItem matriculas = new JMenuItem("Matrículas");
+        alunos.addActionListener(e -> abrirTela(new FrmCadastroAluno()));
+        planos.addActionListener(e -> abrirTela(new FrmCadastroPlano()));
+        matriculas.addActionListener(e -> abrirTela(new FrmCadastroMatricula()));
+        cadastros.add(alunos);
+        cadastros.add(planos);
+        cadastros.add(matriculas);
+
+        JMenu consultas = new JMenu("Consultas");
+        JMenuItem listarAlunos = new JMenuItem("Listar alunos");
+        listarAlunos.addActionListener(e -> abrirTela(new FrmListarAlunos()));
+        consultas.add(listarAlunos);
+
+        JMenu sistema = new JMenu("Sistema");
+        JMenuItem sair = new JMenuItem("Sair");
+        sair.addActionListener(e -> sairDoSistema());
+        sistema.add(sair);
+        barra.add(cadastros);
+        barra.add(consultas);
+        barra.add(sistema);
+        return barra;
+    }
+
+    private void abrirTela(JFrame tela) {
+        tela.setVisible(true);
+        dispose();
+    }
+
+    private void sairDoSistema() {
+        int resposta = JOptionPane.showConfirmDialog(this, "Deseja realmente sair do sistema?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            dispose();
+            new FrmLogin().setVisible(true);
+        }
     }
 
     public static void main(String args[]) {

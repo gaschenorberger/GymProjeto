@@ -32,6 +32,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class FrmCadastroPlano extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private JTextField txtId;
     private JTextField txtNome;
     private JTextField txtDuracao;
@@ -175,10 +177,10 @@ public class FrmCadastroPlano extends JFrame {
                 new Font("Segoe UI", Font.BOLD, 13), new Color(40, 40, 40)
         ));
 
-        btnSalvar = criarBotaoAcao("💾 Salvar");
-        btnEditar = criarBotaoAcao("✏️ Editar");
-        btnExcluir = criarBotaoAcao("🗑️ Excluir");
-        btnLimpar = criarBotaoAcao("🧹 Limpar Campos");
+        btnSalvar = criarBotaoAcao("Salvar");
+        btnEditar = criarBotaoAcao("Editar");
+        btnExcluir = criarBotaoAcao("Excluir");
+        btnLimpar = criarBotaoAcao("Limpar Campos");
 
         btnSalvar.addActionListener(e -> salvarPlano());
         btnEditar.addActionListener(e -> editarPlano());
@@ -200,6 +202,8 @@ public class FrmCadastroPlano extends JFrame {
         ));
 
         modelTabela = new DefaultTableModel(new Object[]{"ID", "Nome do Plano", "Duração (meses)", "Valor (R$)", "Situação", "Descrição"}, 0) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -338,7 +342,7 @@ public class FrmCadastroPlano extends JFrame {
                 JOptionPane.showMessageDialog(this, "Plano excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 limparCampos();
                 carregarTabela();
-            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o plano.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else JOptionPane.showMessageDialog(this, "Não foi possível excluir o plano. Verifique se ele está vinculado a alunos ou matrículas.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -357,7 +361,8 @@ public class FrmCadastroPlano extends JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, informe o Nome do Plano!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        if (plano.getDuracaoMeses() <= 0 || plano.getValor() <= 0) {
+        if (plano.getDuracaoMeses() <= 0 || plano.getValor() <= 0
+                || Double.isNaN(plano.getValor()) || Double.isInfinite(plano.getValor())) {
             JOptionPane.showMessageDialog(this, "A Duração e o Valor devem ser maiores que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return false;
         }

@@ -1,12 +1,14 @@
 package br.com.sistema.model;
 
+import java.time.LocalDate;
+
 public class Aluno {
     private int id;
     private String nome;
     private String cpf;
     private String email;
     private String telefone;
-    private String dataNascimento;
+    private LocalDate dataNascimento;
     private String endereco;
     private String numero;
     private String bairro;
@@ -17,7 +19,7 @@ public class Aluno {
 
     public Aluno() {}
 
-    public Aluno(int id, String nome, String cpf, String email, String telefone, String dataNascimento, String endereco, String numero, String bairro, String cidade, String estado, String plano, String status) {
+    public Aluno(int id, String nome, String cpf, String email, String telefone, LocalDate dataNascimento, String endereco, String numero, String bairro, String cidade, String estado, String plano, String status) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -48,8 +50,8 @@ public class Aluno {
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public String getDataNascimento() { return dataNascimento; }
-    public void setDataNascimento(String dataNascimento) { this.dataNascimento = dataNascimento; }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
     public String getEndereco() { return endereco; }
     public void setEndereco(String endereco) { this.endereco = endereco; }
@@ -71,4 +73,9 @@ public class Aluno {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public boolean isAtivo() { return "Ativo".equalsIgnoreCase(status); }
+
+    @Override
+    public String toString() { return nome; }
 }

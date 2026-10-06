@@ -136,20 +136,6 @@ public class FrmMenuPrincipal extends JFrame {
 
         pnlCenter.add(pnlButtons, gbc);
         add(pnlCenter, BorderLayout.CENTER);
-
-        // Rodapé
-        JPanel pnlFooter = new JPanel(new BorderLayout());
-        pnlFooter.setBackground(Color.WHITE);
-        pnlFooter.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 220)),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
-        JLabel lblFooter = new JLabel("GymProjeto | Sistema de Gerenciamento");
-        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblFooter.setForeground(new Color(100, 100, 100));
-        pnlFooter.add(lblFooter, BorderLayout.WEST);
-
-        add(pnlFooter, BorderLayout.SOUTH);
     }
 
     private JButton criarBotaoMenu(String icone, String texto) {

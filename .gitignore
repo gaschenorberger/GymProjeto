@@ -2,3 +2,4 @@
 /GymProjeto/build/
 /GymProjeto/dist/
 /GymProjeto/lib/*.jar
+!/GymProjeto/lib/postgresql-42.7.13.jar

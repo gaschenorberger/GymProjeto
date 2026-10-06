@@ -16,7 +16,7 @@ public class UsuarioDAO {
                             "0c3f5d5a86aff3ca12020c923adc6c92");
         }
 
-        String sql = "SELECT senha_hash FROM tb_usuarios WHERE email = ? AND ativo = 1";
+        String sql = "SELECT senha_hash FROM tb_usuarios WHERE email = ? AND ativo = TRUE";
         try (Connection conexao = conn; PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {

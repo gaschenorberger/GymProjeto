@@ -15,14 +15,14 @@ Aplicação desktop em Java Swing para gerenciar alunos, planos e matrículas de
 - confirmação antes de exclusões;
 - proteção contra exclusão de registros que possuam vínculos;
 - tabelas com seleção por clique e carregamento dos dados no formulário;
-- persistência em MySQL com modo demonstrativo em memória quando o banco não estiver disponível.
+- persistência em PostgreSQL com modo demonstrativo em memória quando o banco não estiver disponível.
 
 ## Tecnologias
 
 - Java 8;
 - Java Swing;
 - JDBC;
-- MySQL 8;
+- PostgreSQL 17;
 - Apache Ant / NetBeans.
 
 ## Como executar rapidamente
@@ -33,17 +33,17 @@ Aplicação desktop em Java Swing para gerenciar alunos, planos e matrículas de
    - e-mail: `admin@gymprojeto.com`
    - senha: `123456`
 
-Sem o MySQL, a aplicação inicia em modo demonstrativo e mantém os dados somente enquanto estiver aberta. O motivo da indisponibilidade do banco é informado no console.
+Sem o PostgreSQL, a aplicação inicia em modo demonstrativo e mantém os dados somente enquanto estiver aberta. O motivo da indisponibilidade do banco é informado no console.
 
-## Configuração do MySQL
+## Configuração do PostgreSQL
 
-1. Execute [`database/script.sql`](database/script.sql) no MySQL 8.
-2. Baixe o MySQL Connector/J 8 e coloque o JAR em `GymProjeto/lib/`.
-3. No NetBeans, acesse **Propriedades do Projeto > Bibliotecas > Adicionar JAR/Pasta** e adicione o Connector/J.
-4. Por padrão, o sistema utiliza:
-   - URL: `jdbc:mysql://localhost:3306/bdgym`
-   - usuário: `root`
-   - senha vazia.
+1. No pgAdmin, crie o banco `GymProjeto` caso ele ainda não exista.
+2. Abra o **Query Tool** conectado ao banco `GymProjeto` e execute [`database/script.sql`](database/script.sql).
+3. Abra a pasta `GymProjeto` no NetBeans; o driver PostgreSQL já está configurado em `GymProjeto/lib/`.
+4. Por padrão, o sistema utiliza os dados do servidor mostrado no print:
+   - URL: `jdbc:postgresql://localhost:5432/GymProjeto`
+   - usuário: `postgres`
+   - senha: `123`.
 
 Esses valores podem ser alterados sem modificar o código:
 
@@ -111,7 +111,7 @@ GymProjeto/
 
 ## Status
 
-Funcionalidades obrigatórias concluídas. A conexão MySQL depende apenas da instalação local do Connector/J e da execução do script fornecido.
+Funcionalidades obrigatórias concluídas. A conexão PostgreSQL depende da criação do banco `GymProjeto` e da execução do script fornecido.
 
 ## Testes
 

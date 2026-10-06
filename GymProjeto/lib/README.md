@@ -1,10 +1,9 @@
-# Driver JDBC do MySQL
+# Driver JDBC do PostgreSQL
 
-Coloque nesta pasta o arquivo `mysql-connector-j-8.x.x.jar` para utilizar o MySQL.
+O projeto usa o arquivo `postgresql-42.7.13.jar` nesta pasta para acessar o PostgreSQL.
 
-O código não possui dependência de compilação com o driver, mas ele precisa estar no
-classpath durante a execução. No NetBeans, use **Propriedades do Projeto > Bibliotecas >
-Adicionar JAR/Pasta** e selecione o arquivo desta pasta.
+O JAR já está configurado no classpath do projeto em `nbproject/project.properties`,
+portanto não é necessário adicioná-lo manualmente no NetBeans.
 
 Sem o driver ou sem uma conexão disponível, o sistema informa o motivo no console e
 continua em modo demonstrativo em memória.

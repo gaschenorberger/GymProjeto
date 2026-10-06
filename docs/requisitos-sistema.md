@@ -445,7 +445,7 @@ O sistema deverá executar em Java 8 ou superior e utilizar Java Swing.
 
 ## RNF02 - Persistência
 
-Quando configurado com MySQL, o sistema deverá persistir os dados através de JDBC. Na ausência do banco ou do driver, poderá operar em modo demonstrativo em memória, informando essa condição no console.
+Quando configurado com PostgreSQL, o sistema deverá persistir os dados através de JDBC. Na ausência do banco ou do driver, poderá operar em modo demonstrativo em memória, informando essa condição no console.
 
 ## RNF03 - Segurança das Credenciais
 

@@ -111,8 +111,3 @@ GymProjeto/
 
 Funcionalidades obrigatórias concluídas. A conexão PostgreSQL depende da criação do banco `GymProjeto` e da execução do script fornecido.
 
-## Testes
-
-O arquivo `GymProjeto/test/br/com/sistema/CoreValidationTest.java` verifica CPF, datas, autenticação, CRUD de matrícula e integridade dos vínculos. `UiStructureTest.java` confere menus, JTable, botões obrigatórios e o padrão visual das três telas de cadastro. Os testes podem ser executados como classes Java com as asserções habilitadas (`-ea`).
-
-O projeto também pode ser validado pelo NetBeans usando **Limpar e Construir**, que gera `GymProjeto/dist/GymProjeto.jar`.
